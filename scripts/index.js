@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             canRead = false;
         });
-});
+}
     }
     weeksContainer.innerHTML = weeksHTML;
 
