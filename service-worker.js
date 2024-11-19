@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-app-v1';
+const CACHE_NAME = 'workout-app-v1.1';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -7,6 +7,7 @@ const ASSETS_TO_CACHE = [
     '/styles/workout.css',
     '/scripts/index.js',
     '/scripts/workout.js',
+    '/scripts/pwa.js',
     '/manifest.json',
     '/icons/icon.svg',
     '/icons/icon-192x192.png',
@@ -50,25 +51,25 @@ self.addEventListener('fetch', event => {
                     if (response) {
                         return response;
                     }
-                    
+
                     // Clone the request
                     const fetchRequest = event.request.clone();
-                    
+
                     return fetch(fetchRequest).then(response => {
                         // Check if valid response
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
                         }
-                        
+
                         // Clone the response
                         const responseToCache = response.clone();
-                        
+
                         // Add to cache
                         caches.open(CACHE_NAME)
                             .then(cache => {
                                 cache.put(event.request, responseToCache);
                             });
-                            
+
                         return response;
                     });
                 })
