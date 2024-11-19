@@ -10,7 +10,17 @@ document.addEventListener('DOMContentLoaded', function() {
     completeButton.id = 'complete-workout-button';
     completeButton.className = 'complete-workout-button';
     completeButton.innerHTML = 'Mark as Complete';
-    document.querySelector('.workout-header').appendChild(completeButton);
+    
+    // Create workout header if it doesn't exist
+    let workoutHeader = document.querySelector('.workout-header');
+    if (!workoutHeader) {
+        workoutHeader = document.createElement('div');
+        workoutHeader.className = 'workout-header';
+        const title = document.getElementById('workout-title');
+        title.parentNode.insertBefore(workoutHeader, title);
+        workoutHeader.appendChild(title);
+    }
+    workoutHeader.appendChild(completeButton);
 
     // Check if workout is already completed
     const savedProgress = localStorage.getItem('workoutProgress');
@@ -91,15 +101,32 @@ function displayWorkout(workout) {
 }
 
 function createExerciseListItem(exercise) {
-    let details = `${exercise.reps}`;
-    if (exercise.weight) details += ` - ${exercise.weight}`;
-    if (exercise.notes) details += ` (${exercise.notes})`;
-    if (exercise.rounds) details += ` - ${exercise.rounds} rounds`;
+    let details = [];
+    
+    // Add reps/duration
+    if (exercise.reps) details.push(`${exercise.reps}`);
+    
+    // Add weight if present
+    if (exercise.weight && exercise.weight !== '') {
+        details.push(`@ ${exercise.weight}`);
+    }
+    
+    // Add notes if present
+    if (exercise.notes && exercise.notes !== '') {
+        details.push(`(${exercise.notes})`);
+    }
+    
+    // Add rounds if present
+    if (exercise.rounds && exercise.rounds !== '') {
+        details.push(`${exercise.rounds} rounds`);
+    }
     
     return `
         <li class="exercise-item">
-            <span class="exercise-name">${exercise.exercise}</span>
-            <span class="exercise-details">${details}</span>
+            <div class="exercise-info">
+                <span class="exercise-name">${exercise.exercise}</span>
+                <span class="exercise-details">${details.join(' • ')}</span>
+            </div>
         </li>
     `;
 }
