@@ -7,7 +7,6 @@
     <meta name="description" content="16-Week Workout Program - Track your fitness journey">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Workout App">
     <title>Workout Details</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="styles/workout.css">
@@ -18,10 +17,9 @@
         <div class="workout-header">
             <h1 id="workout-title"></h1>
             <div class="header-buttons">
-                <button id="install-button" class="install-button" style="display: none;">
-                    Install App
+                <button id="complete-workout-button" class="complete-workout-button">
+                    Mark as Complete
                 </button>
-                <!-- Complete button will be added here dynamically -->
             </div>
         </div>
         <div id="workout-container">
@@ -29,19 +27,5 @@
         </div>
     </div>
     <script src="scripts/workout.js"></script>
-    <script src="scripts/pwa.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-    </script>
 </body>
 </html>
