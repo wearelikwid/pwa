@@ -23,6 +23,12 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .complete-workout-button {
     padding: 10px 20px;
     border: 2px solid #4CAF50;
@@ -42,6 +48,21 @@ body {
     background-color: #2e4432;
     border-color: #2e4432;
     color: #4CAF50;
+}
+
+.install-button {
+    padding: 10px 20px;
+    border: 2px solid #2196F3;
+    background-color: #363636;
+    color: #2196F3;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.install-button:hover {
+    background-color: #404040;
 }
 
 h1 {
@@ -77,19 +98,17 @@ h2 {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .exercise-item {
     display: flex;
-    padding: 12px 15px;
-    margin-bottom: 8px;
+    padding: 15px;
     background-color: #363636;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-}
-
-.exercise-item:last-child {
-    margin-bottom: 0;
 }
 
 .exercise-item:hover {
@@ -129,6 +148,17 @@ h2 {
         text-align: center;
     }
 
+    .header-buttons {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .complete-workout-button,
+    .install-button {
+        width: 100%;
+    }
+
     .section {
         padding: 15px;
     }
@@ -140,18 +170,11 @@ h2 {
     .exercise-item {
         flex-direction: column;
         gap: 8px;
-        padding: 15px;
     }
 
     .exercise-column {
         width: 100%;
         padding: 5px 0;
-    }
-
-    .exercise-name {
-        font-size: 1.1em;
-        font-weight: 500;
-        margin-bottom: 8px;
     }
 
     .exercise-column:not(.exercise-name) {
