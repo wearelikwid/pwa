@@ -2,8 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Generate all week sections
     const weeksContainer = document.getElementById('weeks-container');
     let weeksHTML = '';
-    for (let i = 1; i <= 16; i++) {
+    let canRead = true;
+    let num = 0;
+    while (canRead) {
+        num ++;
+        fetch(`workouts/week${num}.json`)
+        .then(data => {
         weeksHTML += createWeekSection(i);
+        })
+        .catch(error => {
+            canRead = false;
+        });
+});
     }
     weeksContainer.innerHTML = weeksHTML;
 
