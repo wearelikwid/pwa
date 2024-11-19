@@ -12,8 +12,20 @@ body {
     margin: 0 auto;
 }
 
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #242424;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
 h1, h2 {
     color: #ffffff;
+    margin: 0;
 }
 
 .week-section {
@@ -91,9 +103,31 @@ h1, h2 {
     position: relative;
 }
 
+.install-button {
+    padding: 10px 20px;
+    border: 2px solid #2196F3;
+    background-color: #363636;
+    color: #2196F3;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.install-button:hover {
+    background-color: #404040;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 10px;
+    }
+
+    .app-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
     }
 
     .week-section {
@@ -107,5 +141,10 @@ h1, h2 {
 
     .workout-item {
         margin-bottom: 8px;
+    }
+
+    .install-button {
+        margin: 10px 0;
+        width: 100%;
     }
 }
