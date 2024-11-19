@@ -5,32 +5,25 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     // Stash the event so it can be triggered later
     deferredPrompt = e;
-    
-    // Show the install button if it exists
+    // Update UI to notify the user they can add to home screen
     const installButton = document.getElementById('install-button');
     if (installButton) {
         installButton.style.display = 'block';
         
-        installButton.addEventListener('click', (e) => {
+        installButton.addEventListener('click', async () => {
+            // Hide the app provided install promotion
+            installButton.style.display = 'none';
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-            });
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            // We've used the prompt, and can't use it again, discard it
+            deferredPrompt = null;
         });
     }
 });
 
-// If the app is already installed, hide the install button
 window.addEventListener('appinstalled', (evt) => {
-    const installButton = document.getElementById('install-button');
-    if (installButton) {
-        installButton.style.display = 'none';
-    }
+    console.log('App was installed successfully');
 });
