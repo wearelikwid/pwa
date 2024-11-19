@@ -8,6 +8,7 @@ const ASSETS_TO_CACHE = [
     '/scripts/index.js',
     '/scripts/workout.js',
     '/manifest.json',
+    '/icons/icon.svg',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png'
 ];
@@ -17,6 +18,7 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
+                console.log('Opened cache');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
     );
@@ -40,43 +42,67 @@ self.addEventListener('activate', event => {
 // Fetch event - serve from cache, then network
 self.addEventListener('fetch', event => {
     // Handle workout data requests separately
-    if (event.request.url.includes('workouts/week')) {
+    if (event.request.url.includes('workouts/')) {
         event.respondWith(
             caches.match(event.request)
                 .then(response => {
-                    return response || fetch(event.request)
-                        .then(response => {
-                            // Clone the response
-                            const responseToCache = response.clone();
-                            
-                            // Add to cache
-                            caches.open(CACHE_NAME)
-                                .then(cache => {
-                                    cache.put(event.request, responseToCache);
-                                });
-
+                    // Return cached response if found
+                    if (response) {
+                        return response;
+                    }
+                    
+                    // Clone the request
+                    const fetchRequest = event.request.clone();
+                    
+                    return fetch(fetchRequest).then(response => {
+                        // Check if valid response
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
-                        });
-                })
-                .catch(() => {
-                    // Return offline fallback for workout data
-                    return new Response(
-                        JSON.stringify({
-                            error: 'You are offline. Please check your connection.'
-                        }),
-                        {
-                            headers: { 'Content-Type': 'application/json' }
                         }
-                    );
+                        
+                        // Clone the response
+                        const responseToCache = response.clone();
+                        
+                        // Add to cache
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                cache.put(event.request, responseToCache);
+                            });
+                            
+                        return response;
+                    });
                 })
         );
     } else {
-        // For other requests, try network first, then cache
+        // For other requests, try cache first, then network
         event.respondWith(
-            fetch(event.request)
-                .catch(() => {
-                    return caches.match(event.request);
+            caches.match(event.request)
+                .then(response => {
+                    return response || fetch(event.request);
                 })
         );
     }
 });
+
+// Handle background sync for offline changes
+self.addEventListener('sync', event => {
+    if (event.tag === 'sync-workouts') {
+        event.waitUntil(
+            // Sync workout completion status
+            syncWorkoutData()
+        );
+    }
+});
+
+// Function to sync workout data
+async function syncWorkoutData() {
+    try {
+        const offlineData = await localforage.getItem('offlineWorkouts');
+        if (offlineData) {
+            // Process offline data here
+            await localforage.removeItem('offlineWorkouts');
+        }
+    } catch (error) {
+        console.error('Error syncing workout data:', error);
+    }
+}
