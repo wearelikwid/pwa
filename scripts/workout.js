@@ -65,9 +65,20 @@ function displayWorkout(workout) {
     const workoutContainer = document.getElementById('workout-container');
     let html = '';
 
+    const headerTemplate = `
+        <div class="exercise-header">
+            <div class="exercise-column">Exercise</div>
+            <div class="exercise-column">Reps/Duration</div>
+            <div class="exercise-column">Notes</div>
+            <div class="exercise-column">Weight</div>
+            <div class="exercise-column">Rounds</div>
+        </div>
+    `;
+
     // Display warmup if it exists
     if (workout.warmup && workout.warmup.exercises) {
         html += '<div class="section"><h2>Warm-up</h2>';
+        html += headerTemplate;
         html += '<ul class="exercise-list">';
         workout.warmup.exercises.forEach(exercise => {
             html += createExerciseListItem(exercise);
@@ -79,6 +90,7 @@ function displayWorkout(workout) {
     if (workout.circuits) {
         workout.circuits.forEach((circuit, index) => {
             html += `<div class="section"><h2>${circuit.name || `Circuit ${index + 1}`}</h2>`;
+            html += headerTemplate;
             html += '<ul class="exercise-list">';
             circuit.exercises.forEach(exercise => {
                 html += createExerciseListItem(exercise);
@@ -90,6 +102,7 @@ function displayWorkout(workout) {
     // Display single circuit if it exists
     if (workout.circuit && workout.circuit.exercises) {
         html += '<div class="section"><h2>Circuit</h2>';
+        html += headerTemplate;
         html += '<ul class="exercise-list">';
         workout.circuit.exercises.forEach(exercise => {
             html += createExerciseListItem(exercise);
@@ -101,32 +114,13 @@ function displayWorkout(workout) {
 }
 
 function createExerciseListItem(exercise) {
-    let details = [];
-    
-    // Add reps/duration
-    if (exercise.reps) details.push(`${exercise.reps}`);
-    
-    // Add weight if present
-    if (exercise.weight && exercise.weight !== '') {
-        details.push(`@ ${exercise.weight}`);
-    }
-    
-    // Add notes if present
-    if (exercise.notes && exercise.notes !== '') {
-        details.push(`(${exercise.notes})`);
-    }
-    
-    // Add rounds if present
-    if (exercise.rounds && exercise.rounds !== '') {
-        details.push(`${exercise.rounds} rounds`);
-    }
-    
     return `
         <li class="exercise-item">
-            <div class="exercise-info">
-                <span class="exercise-name">${exercise.exercise}</span>
-                <span class="exercise-details">${details.join(' • ')}</span>
-            </div>
+            <div class="exercise-column exercise-name">${exercise.exercise}</div>
+            <div class="exercise-column">${exercise.reps || '-'}</div>
+            <div class="exercise-column">${exercise.notes || '-'}</div>
+            <div class="exercise-column">${exercise.weight || '-'}</div>
+            <div class="exercise-column">${exercise.rounds || '-'}</div>
         </li>
     `;
 }
