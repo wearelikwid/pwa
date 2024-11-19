@@ -2,24 +2,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Generate all week sections
     const weeksContainer = document.getElementById('weeks-container');
     let weeksHTML = '';
-    let canRead = true;
     let num = 0;
-    while (canRead) {
-        num ++;
-        fetch(`workouts/week${num}.json`)
-        .then(data => {
-        weeksHTML += createWeekSection(i);
-        })
-        .catch(error => {
-            canRead = false;
-        });
+
+    // Fix: Use async/await and proper error handling for fetch
+    async function loadWeeks() {
+        try {
+            while (true) {
+                num++;
+                const response = await fetch(`workouts/week${num}.json`);
+                if (!response.ok) {
+                    break;
+                }
+                const data = await response.json();
+                weeksHTML += createWeekSection(num);
+            }
+        } catch (error) {
+            console.error('Error loading weeks:', error);
+        } finally {
+            weeksContainer.innerHTML = weeksHTML;
+            // Move these calls inside finally to ensure DOM is updated
+            loadProgress();
+            addClickHandlers();
+        }
     }
-    weeksContainer.innerHTML = weeksHTML;
 
-    // Load saved progress
-    loadProgress();
+    loadWeeks();
+});
 
-    // Add click handlers to all complete buttons
+// Separate click handler setup into its own function
+function addClickHandlers() {
     document.querySelectorAll('.complete-button').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -28,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleWorkoutCompletion(week, type, this);
         });
     });
-});
+}
 
 function createWeekSection(weekNumber) {
     return `
