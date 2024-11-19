@@ -117,10 +117,10 @@ function createExerciseListItem(exercise) {
     return `
         <li class="exercise-item">
             <div class="exercise-column exercise-name">${exercise.exercise}</div>
-            <div class="exercise-column">${exercise.reps || '-'}</div>
-            <div class="exercise-column">${exercise.notes || '-'}</div>
-            <div class="exercise-column">${exercise.weight || '-'}</div>
-            <div class="exercise-column">${exercise.rounds || '-'}</div>
+            <div class="exercise-column" data-label="Reps/Duration">${exercise.reps || '-'}</div>
+            <div class="exercise-column" data-label="Notes">${exercise.notes || '-'}</div>
+            <div class="exercise-column" data-label="Weight">${exercise.weight || '-'}</div>
+            <div class="exercise-column" data-label="Rounds">${exercise.rounds || '-'}</div>
         </li>
     `;
 }
