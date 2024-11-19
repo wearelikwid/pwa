@@ -1,42 +1,42 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    // Generate all week sections
+document.addEventListener('DOMContentLoaded', function() {
     const weeksContainer = document.getElementById('weeks-container');
     let weeksHTML = '';
     let weekNumber = 1;
     
-    while (true) {
-        try {
-            // Try to fetch the workout file
-            const response = await fetch(`workouts/week${weekNumber}.json`);
-            if (!response.ok) {
-                break; // Stop if we can't find the next week's file
-            }
-            weeksHTML += createWeekSection(weekNumber);
-            weekNumber++;
-        } catch (error) {
-            console.error(`Error checking week ${weekNumber}:`, error);
-            break; // Stop if there's an error fetching the file
-        }
-    }
-
-    if (weekNumber === 1) {
-        weeksContainer.innerHTML = '<div class="error-message">No workout files found</div>';
-    } else {
-        weeksContainer.innerHTML = weeksHTML;
-        
-        // Load saved progress
-        loadProgress();
-
-        // Add click handlers to all complete buttons
-        document.querySelectorAll('.complete-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const week = this.dataset.week;
-                const type = this.dataset.type;
-                toggleWorkoutCompletion(week, type, this);
+    function checkNextWeek() {
+        fetch(`workouts/week${weekNumber}.json`)
+            .then(response => response.json())
+            .then(data => {
+                // Add the week section to HTML
+                weeksHTML += createWeekSection(weekNumber);
+                weekNumber++;
+                checkNextWeek(); // Check for next week
+            })
+            .catch(error => {
+                // No more workout files found or error occurred
+                if (weekNumber === 1) {
+                    weeksContainer.innerHTML = '<div class="error-message">No workout files found</div>';
+                } else {
+                    weeksContainer.innerHTML = weeksHTML;
+                    
+                    // Load saved progress
+                    loadProgress();
+                    
+                    // Add click handlers to all complete buttons
+                    document.querySelectorAll('.complete-button').forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const week = this.dataset.week;
+                            const type = this.dataset.type;
+                            toggleWorkoutCompletion(week, type, this);
+                        });
+                    });
+                }
             });
-        });
     }
+    
+    // Start checking for workout files
+    checkNextWeek();
 });
 
 function createWeekSection(weekNumber) {
