@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             weeksHTML += createWeekSection(weekNumber);
             weekNumber++;
         } catch (error) {
+            console.error(`Error checking week ${weekNumber}:`, error);
             break; // Stop if there's an error fetching the file
         }
     }
@@ -37,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 });
-
 
 function createWeekSection(weekNumber) {
     return `
