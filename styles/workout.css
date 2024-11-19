@@ -64,43 +64,49 @@ h2 {
     font-size: 1.5em;
 }
 
+.exercise-header {
+    display: flex;
+    padding: 10px 15px;
+    background-color: #363636;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
 .exercise-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
 }
 
 .exercise-item {
+    display: flex;
+    padding: 12px 15px;
+    margin-bottom: 8px;
     background-color: #363636;
     border-radius: 5px;
-    padding: 15px;
     transition: background-color 0.3s ease;
+}
+
+.exercise-item:last-child {
+    margin-bottom: 0;
 }
 
 .exercise-item:hover {
     background-color: #404040;
 }
 
-.exercise-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
+.exercise-column {
+    flex: 1;
+    padding: 0 10px;
+}
+
+.exercise-column:first-child {
+    flex: 2;
 }
 
 .exercise-name {
     font-weight: 500;
-    flex: 1;
-}
-
-.exercise-details {
-    color: #b0b0b0;
-    text-align: right;
-    font-size: 0.95em;
-    white-space: nowrap;
 }
 
 .error-message {
@@ -111,7 +117,7 @@ h2 {
     border-radius: 10px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     body {
         padding: 10px;
     }
@@ -127,19 +133,30 @@ h2 {
         padding: 15px;
     }
 
-    .exercise-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .exercise-details {
-        text-align: left;
-        white-space: normal;
-        width: 100%;
+    .exercise-header {
+        display: none;
     }
 
     .exercise-item {
-        padding: 12px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .exercise-column {
+        padding: 5px 0;
+        display: flex;
+    }
+
+    .exercise-column:not(.exercise-name):before {
+        content: attr(class);
+        text-transform: capitalize;
+        min-width: 120px;
+        font-weight: 500;
+        color: #808080;
+    }
+
+    .exercise-column.exercise-name {
+        font-size: 1.1em;
+        color: #ffffff;
     }
 }
