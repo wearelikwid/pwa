@@ -7,6 +7,7 @@
     <meta name="description" content="16-Week Workout Program - Track your fitness journey">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Workout App">
     <title>Workout Details</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="styles/workout.css">
@@ -16,13 +17,19 @@
     <div class="container">
         <div class="workout-header">
             <h1 id="workout-title"></h1>
-            <!-- Complete button will be added here dynamically -->
+            <div class="header-buttons">
+                <button id="install-button" class="install-button" style="display: none;">
+                    Install App
+                </button>
+                <!-- Complete button will be added here dynamically -->
+            </div>
         </div>
         <div id="workout-container">
             <!-- Workout content will be loaded dynamically -->
         </div>
     </div>
     <script src="scripts/workout.js"></script>
+    <script src="scripts/pwa.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
