@@ -1,17 +1,18 @@
 const CACHE_NAME = 'workout-app-v1.1';
 const ASSETS_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/workout.html',
-    '/styles/index.css',
-    '/styles/workout.css',
-    '/scripts/index.js',
-    '/scripts/workout.js',
-    '/scripts/pwa.js',
-    '/manifest.json',
-    '/icons/icon.svg',
-    '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png'
+    './',
+    'index.html',
+    'workout.html',
+    'styles/index.css',
+    'styles/workout.css',
+    'scripts/index.js',
+    'scripts/workout.js',
+    'scripts/pwa.js',
+    'manifest.json',
+    'icons/icon.svg',
+    'icons/icon-192x192.png',
+    'icons/icon-512x512.png',
+    'workouts/'  // Add this to cache the workouts directory
 ];
 
 // Install event - cache assets
@@ -21,6 +22,9 @@ self.addEventListener('install', event => {
             .then(cache => {
                 console.log('Opened cache');
                 return cache.addAll(ASSETS_TO_CACHE);
+            })
+            .catch(error => {
+                console.error('Cache installation failed:', error);
             })
     );
 });
@@ -32,6 +36,7 @@ self.addEventListener('activate', event => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheName !== CACHE_NAME) {
+                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -42,21 +47,16 @@ self.addEventListener('activate', event => {
 
 // Fetch event - serve from cache, then network
 self.addEventListener('fetch', event => {
-    // Handle workout data requests separately
-    if (event.request.url.includes('workouts/')) {
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    // Return cached response if found
-                    if (response) {
-                        return response;
-                    }
-
-                    // Clone the request
-                    const fetchRequest = event.request.clone();
-
-                    return fetch(fetchRequest).then(response => {
-                        // Check if valid response
+    event.respondWith(
+        caches.match(event.request)
+            .then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+                
+                return fetch(event.request)
+                    .then(response => {
+                        // Don't cache if not a valid response
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
                         }
@@ -64,32 +64,26 @@ self.addEventListener('fetch', event => {
                         // Clone the response
                         const responseToCache = response.clone();
 
-                        // Add to cache
                         caches.open(CACHE_NAME)
                             .then(cache => {
                                 cache.put(event.request, responseToCache);
                             });
 
                         return response;
+                    })
+                    .catch(error => {
+                        console.error('Fetch failed:', error);
+                        // You might want to return a custom offline page here
+                        return new Response('Offline content not available');
                     });
-                })
-        );
-    } else {
-        // For other requests, try cache first, then network
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    return response || fetch(event.request);
-                })
-        );
-    }
+            })
+    );
 });
 
 // Handle background sync for offline changes
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-workouts') {
         event.waitUntil(
-            // Sync workout completion status
             syncWorkoutData()
         );
     }
@@ -107,3 +101,10 @@ async function syncWorkoutData() {
         console.error('Error syncing workout data:', error);
     }
 }
+
+// Handle service worker updates
+self.addEventListener('message', event => {
+    if (event.data.action === 'skipWaiting') {
+        self.skipWaiting();
+    }
+});
