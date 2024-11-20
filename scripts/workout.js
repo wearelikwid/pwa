@@ -5,22 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('workout-title').textContent = `Week ${week} - ${formatWorkoutType(type)}`;
 
-    // Add completion button
-    const completeButton = document.createElement('button');
-    completeButton.id = 'complete-workout-button';
-    completeButton.className = 'complete-workout-button';
-    completeButton.innerHTML = 'Mark as Complete';
-    
-    // Create workout header if it doesn't exist
-    let workoutHeader = document.querySelector('.workout-header');
-    if (!workoutHeader) {
-        workoutHeader = document.createElement('div');
-        workoutHeader.className = 'workout-header';
-        const title = document.getElementById('workout-title');
-        title.parentNode.insertBefore(workoutHeader, title);
-        workoutHeader.appendChild(title);
-    }
-    workoutHeader.appendChild(completeButton);
+    // Get the existing button instead of creating a new one
+    const completeButton = document.getElementById('complete-workout-button');
 
     // Check if workout is already completed
     const savedProgress = localStorage.getItem('workoutProgress');
@@ -133,7 +119,7 @@ function displayError(message) {
 function toggleWorkoutCompletion(week, type, button) {
     let completedWorkouts = [];
     const savedProgress = localStorage.getItem('workoutProgress');
-    
+
     if (savedProgress) {
         completedWorkouts = JSON.parse(savedProgress);
     }
