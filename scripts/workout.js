@@ -1,100 +1,111 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const week = params.get('week');
-    const day = params.get('day');
-    
-    // Set the workout title
-    const workoutTitle = document.getElementById('workout-title');
-    workoutTitle.textContent = `Week ${week} - Lower Body`;
-    
-    // Sample workout data structure
-    const workoutData = {
-        circuits: [
-            {
-                name: "Circuit 1",
-                exercises: [
-                    {
-                        name: "Sled push w/rage3 pull",
-                        details: "backwards",
-                        reps: "3 rounds"
-                    }
-                ]
-            },
-            {
-                name: "Circuit 2",
-                exercises: [
-                    {
-                        name: "Nordic quad extensions",
-                        details: "10",
-                        reps: "4 rounds"
-                    },
-                    {
-                        name: "Barbell wall sit",
-                        details: "30-40 seconds",
-                        reps: "4 rounds"
-                    }
-                ]
-            }
-        ]
-    };
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const week = urlParams.get('week');
+    const type = urlParams.get('type');
 
-    // Create and display the workout
-    const workoutContainer = document.getElementById('workout-container');
-    workoutContainer.innerHTML = ''; // Clear existing content
+    document.getElementById('workout-title').textContent = `Week ${week} - ${formatWorkoutType(type)}`;
 
-    workoutData.circuits.forEach((circuit, index) => {
-        const circuitSection = document.createElement('div');
-        circuitSection.className = 'section';
-
-        const circuitTitle = document.createElement('h2');
-        circuitTitle.textContent = circuit.name;
-        circuitSection.appendChild(circuitTitle);
-
-        const exerciseList = document.createElement('div');
-        exerciseList.className = 'exercise-list';
-
-        circuit.exercises.forEach(exercise => {
-            const exerciseItem = document.createElement('div');
-            exerciseItem.className = 'exercise-item';
-
-            const exerciseName = document.createElement('div');
-            exerciseName.className = 'exercise-name';
-            exerciseName.textContent = exercise.name;
-
-            const exerciseDetails = document.createElement('div');
-            exerciseDetails.className = 'exercise-details';
-            exerciseDetails.textContent = exercise.reps;
-
-            exerciseItem.appendChild(exerciseName);
-            exerciseItem.appendChild(exerciseDetails);
-            exerciseList.appendChild(exerciseItem);
-        });
-
-        circuitSection.appendChild(exerciseList);
-        workoutContainer.appendChild(circuitSection);
-    });
-
-    // Handle workout completion
     const completeButton = document.getElementById('complete-workout-button');
-    completeButton.addEventListener('click', () => {
-        completeButton.classList.toggle('active');
-        const isCompleted = completeButton.classList.contains('active');
-        
+
+    // Check if workout is already completed
+    const savedProgress = localStorage.getItem('workoutProgress');
+    if (savedProgress) {
+        const completedWorkouts = JSON.parse(savedProgress);
+        const isCompleted = completedWorkouts.some(workout => 
+            workout.week === week && workout.type === type);
         if (isCompleted) {
-            completeButton.textContent = 'Completed';
-            // Save completion status
-            localStorage.setItem(`workout_${week}_${day}`, 'completed');
-        } else {
-            completeButton.textContent = 'Mark as Complete';
-            // Remove completion status
-            localStorage.removeItem(`workout_${week}_${day}`);
+            completeButton.classList.add('active');
+            completeButton.innerHTML = 'Completed';
         }
+    }
+
+    completeButton.addEventListener('click', function() {
+        toggleWorkoutCompletion(week, type, this);
     });
 
-    // Check if workout was previously completed
-    const isCompleted = localStorage.getItem(`workout_${week}_${day}`) === 'completed';
-    if (isCompleted) {
-        completeButton.classList.add('active');
-        completeButton.textContent = 'Completed';
-    }
+    // Load workout data
+    fetch(`workouts/week${week}.json`)
+        .then(response => response.json())
+        .then(data => {
+            const workoutData = data[type];
+            if (workoutData) {
+                displayWorkout(workoutData);
+            } else {
+                displayError(`No ${formatWorkoutType(type)} workout found for Week ${week}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading workout:', error);
+            displayError(`Error loading workout for Week ${week}`);
+        });
 });
+
+function formatWorkoutType(type) {
+    const words = type.split(/(?=[A-Z])/);
+    return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+function displayWorkout(workout) {
+    const workoutContainer = document.getElementById('workout-container');
+    let html = '';
+
+    // Display circuits if they exist
+    if (workout.circuits) {
+        workout.circuits.forEach((circuit, index) => {
+            html += `
+                <div class="section">
+                    <h2>Circuit ${index + 1}</h2>
+                    <ul class="exercise-list">
+                        ${circuit.exercises.map(exercise => createExerciseListItem(exercise)).join('')}
+                    </ul>
+                </div>
+            `;
+        });
+    }
+
+    workoutContainer.innerHTML = html;
+}
+
+function createExerciseListItem(exercise) {
+    return `
+        <li class="exercise-item">
+            <div class="exercise-name">
+                ${exercise.exercise}
+                ${exercise.notes ? `<div class="exercise-notes">${exercise.notes}</div>` : ''}
+            </div>
+            <div class="exercise-details">
+                <div class="reps-duration">${exercise.reps || ''}</div>
+                <div class="rounds">${exercise.rounds ? `${exercise.rounds} rounds` : ''}</div>
+            </div>
+        </li>
+    `;
+}
+
+function displayError(message) {
+    const workoutContainer = document.getElementById('workout-container');
+    workoutContainer.innerHTML = `<div class="error-message">${message}</div>`;
+}
+
+function toggleWorkoutCompletion(week, type, button) {
+    let completedWorkouts = [];
+    const savedProgress = localStorage.getItem('workoutProgress');
+
+    if (savedProgress) {
+        completedWorkouts = JSON.parse(savedProgress);
+    }
+
+    const workoutIndex = completedWorkouts.findIndex(workout => 
+        workout.week === week && workout.type === type);
+
+    if (workoutIndex === -1) {
+        completedWorkouts.push({ week, type });
+        button.classList.add('active');
+        button.innerHTML = 'Completed';
+    } else {
+        completedWorkouts.splice(workoutIndex, 1);
+        button.classList.remove('active');
+        button.innerHTML = 'Mark as Complete';
+    }
+
+    localStorage.setItem('workoutProgress', JSON.stringify(completedWorkouts));
+}
