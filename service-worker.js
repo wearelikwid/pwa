@@ -1,160 +1,135 @@
-const CACHE_NAME = 'workout-app-v1.2';
+const CACHE_NAME = 'workout-app-v1.3';
 const ASSETS_TO_CACHE = [
-    './',
-    'index.html',
-    'workout.html',
-    'styles/index.css',
-    'styles/workout.css',
-    'scripts/index.js',
-    'scripts/workout.js',
-    'scripts/pwa.js',
-    'manifest.json',
-    'icons/icon.svg',
-    'icons/icon-192x192.png',
-    'icons/icon-512x512.png'
+    '/',
+    '/index.html',
+    '/workout.html',
+    '/styles/index.css',
+    '/styles/workout.css',
+    '/scripts/index.js',
+    '/scripts/workout.js',
+    '/scripts/pwa.js',
+    '/manifest.json',
+    '/icons/icon.svg',
+    '/icons/icon-192x192.png',
+    '/icons/icon-512x512.png'
 ];
-
-const DYNAMIC_CACHE = 'workout-dynamic-v1';
 
 // Helper function to check if URL is valid for caching
 function isValidUrl(url) {
-    const urlObj = new URL(url);
-    return ['http:', 'https:'].includes(urlObj.protocol);
+    try {
+        const urlObj = new URL(url);
+        return ['http:', 'https:'].includes(urlObj.protocol);
+    } catch {
+        return false;
+    }
 }
 
-// Install event - cache assets
+// Helper function to handle failed requests
+function handleFetchError(error) {
+    console.error('Fetch failed:', error);
+    return new Response('App is offline. Please check your connection.', {
+        status: 503,
+        statusText: 'Service Unavailable'
+    });
+}
+
+// Install event
 self.addEventListener('install', event => {
     event.waitUntil(
-        Promise.all([
-            caches.open(CACHE_NAME)
-                .then(cache => {
-                    console.log('Caching static assets');
-                    return cache.addAll(ASSETS_TO_CACHE);
-                }),
-            caches.open(DYNAMIC_CACHE)
-        ])
-        .then(() => self.skipWaiting())
-        .catch(error => {
-            console.error('Cache installation failed:', error);
-        })
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                console.log('Caching static assets');
+                // Cache each asset individually
+                return Promise.all(
+                    ASSETS_TO_CACHE.map(url => {
+                        return fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Failed to fetch ${url}`);
+                                }
+                                return cache.put(url, response);
+                            })
+                            .catch(error => {
+                                console.warn(`Failed to cache ${url}:`, error);
+                            });
+                    })
+                );
+            })
+            .then(() => self.skipWaiting())
     );
 });
 
-// Activate event - clean up old caches
+// Activate event
 self.addEventListener('activate', event => {
     event.waitUntil(
-        Promise.all([
-            caches.keys().then(cacheNames => {
+        caches.keys()
+            .then(cacheNames => {
                 return Promise.all(
                     cacheNames.map(cacheName => {
-                        if (![CACHE_NAME, DYNAMIC_CACHE].includes(cacheName)) {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('Deleting old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
                     })
                 );
-            }),
-            self.clients.claim()
-        ])
+            })
+            .then(() => self.clients.claim())
     );
 });
 
-// Fetch event - serve from cache, then network
+// Fetch event
 self.addEventListener('fetch', event => {
-    // Only process valid URLs
-    if (!isValidUrl(event.request.url)) {
+    // Ignore non-GET requests and invalid URLs
+    if (event.request.method !== 'GET' || !isValidUrl(event.request.url)) {
         return;
     }
 
-    const url = new URL(event.request.url);
-    
-    // Handle workout JSON files
-    if (url.pathname.includes('/workouts/')) {
-        event.respondWith(
-            caches.match(event.request)
-                .then(cachedResponse => {
-                    if (cachedResponse) {
-                        return cachedResponse;
-                    }
-                    return fetch(event.request)
-                        .then(response => {
-                            if (!response || response.status !== 200) {
-                                return response;
-                            }
-                            const responseToCache = response.clone();
-                            if (isValidUrl(event.request.url)) {
-                                caches.open(DYNAMIC_CACHE)
-                                    .then(cache => {
-                                        cache.put(event.request, responseToCache);
-                                    });
-                            }
-                            return response;
-                        })
-                        .catch(() => {
-                            if (url.pathname.includes('.json')) {
-                                return new Response(JSON.stringify({
-                                    error: 'Workout not found',
-                                    message: 'This workout is not available'
-                                }), {
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    }
-                                });
-                            }
-                        });
-                })
-        );
-        return;
-    }
-
-    // Handle regular static assets
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
                 if (cachedResponse) {
                     return cachedResponse;
                 }
-                return fetch(event.request)
+
+                return fetch(event.request.clone())
                     .then(response => {
+                        // Check if we received a valid response
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
                         }
-                        const responseToCache = response.clone();
-                        if (isValidUrl(event.request.url)) {
+
+                        // Don't cache chrome-extension URLs
+                        if (!event.request.url.startsWith('chrome-extension://')) {
+                            const responseToCache = response.clone();
                             caches.open(CACHE_NAME)
                                 .then(cache => {
                                     cache.put(event.request, responseToCache);
+                                })
+                                .catch(error => {
+                                    console.warn('Cache put error:', error);
                                 });
                         }
+
                         return response;
                     })
-                    .catch(error => {
-                        console.error('Fetch failed:', error);
-                        return new Response('App is offline. Please check your connection.');
-                    });
+                    .catch(handleFetchError);
             })
     );
 });
 
-// Handle background sync
+// Background sync
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-workouts') {
-        event.waitUntil(syncWorkoutData());
+        event.waitUntil(
+            // Implement your sync logic here
+            Promise.resolve()
+        );
     }
 });
 
-async function syncWorkoutData() {
-    try {
-        const offlineData = await localforage.getItem('offlineWorkouts');
-        if (offlineData) {
-            await localforage.removeItem('offlineWorkouts');
-        }
-    } catch (error) {
-        console.error('Error syncing workout data:', error);
-    }
-}
-
+// Message handling
 self.addEventListener('message', event => {
-    if (event.data.action === 'skipWaiting') {
+    if (event.data && event.data.action === 'skipWaiting') {
         self.skipWaiting();
     }
 });
