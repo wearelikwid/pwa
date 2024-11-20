@@ -18,43 +18,34 @@ body {
     background: linear-gradient(135deg, #6b46c1 0%, #3182ce 100%);
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .header-buttons {
     display: flex;
     gap: 12px;
     align-items: center;
+    margin-top: 16px;
 }
 
 .complete-workout-button {
-    padding: 12px 24px;
+    width: 100%;
+    padding: 12px;
     border: none;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #6b46c1 0%, #3182ce 100%);
     color: #ffffff;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-weight: 500;
+    text-align: center;
 }
 
 .complete-workout-button:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    opacity: 0.9;
 }
 
 .complete-workout-button.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.section {
-    background-color: #1a1a1a;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: #4CAF50;
 }
 
 h1, h2 {
@@ -63,13 +54,11 @@ h1, h2 {
     font-weight: 600;
 }
 
-.exercise-header {
-    display: flex;
-    padding: 16px;
-    background-color: #2d2d2d;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    font-weight: 500;
+.section {
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
 }
 
 .exercise-list {
@@ -83,23 +72,32 @@ h1, h2 {
 
 .exercise-item {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 16px;
-    background-color: #2d2d2d;
+    background-color: #242424;
     border-radius: 12px;
     transition: all 0.2s ease;
 }
 
 .exercise-item:hover {
-    background-color: #3d3d3d;
+    background-color: #2d2d2d;
 }
 
 .exercise-column {
-    flex: 1;
-    padding: 0 12px;
+    display: flex;
+    align-items: center;
 }
 
 .exercise-name {
     font-weight: 500;
+    flex: 2;
+}
+
+.exercise-details {
+    display: flex;
+    gap: 24px;
+    color: #a0aec0;
 }
 
 .error-message {
@@ -108,4 +106,22 @@ h1, h2 {
     padding: 24px;
     background-color: #1a1a1a;
     border-radius: 16px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 16px;
+    }
+
+    .exercise-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .exercise-details {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 }
