@@ -17,6 +17,9 @@
         <div class="workout-header">
             <h1 id="workout-title"></h1>
             <div class="header-buttons">
+                <button id="install-button" class="install-button" style="display: none;">
+                    Install App
+                </button>
                 <button id="complete-workout-button" class="complete-workout-button">
                     Mark as Complete
                 </button>
@@ -27,5 +30,19 @@
         </div>
     </div>
     <script src="scripts/workout.js"></script>
+    <script src="scripts/pwa.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
