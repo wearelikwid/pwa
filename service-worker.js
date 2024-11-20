@@ -14,8 +14,13 @@ const ASSETS_TO_CACHE = [
     'icons/icon-512x512.png'
 ];
 
-// Dynamic cache for workout JSON files
 const DYNAMIC_CACHE = 'workout-dynamic-v1';
+
+// Helper function to check if URL is valid for caching
+function isValidUrl(url) {
+    const urlObj = new URL(url);
+    return ['http:', 'https:'].includes(urlObj.protocol);
+}
 
 // Install event - cache assets
 self.addEventListener('install', event => {
@@ -27,9 +32,6 @@ self.addEventListener('install', event => {
                     return cache.addAll(ASSETS_TO_CACHE);
                 }),
             caches.open(DYNAMIC_CACHE)
-                .then(cache => {
-                    console.log('Creating dynamic cache');
-                })
         ])
         .then(() => self.skipWaiting())
         .catch(error => {
@@ -46,7 +48,6 @@ self.addEventListener('activate', event => {
                 return Promise.all(
                     cacheNames.map(cacheName => {
                         if (![CACHE_NAME, DYNAMIC_CACHE].includes(cacheName)) {
-                            console.log('Deleting old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
                     })
@@ -59,9 +60,14 @@ self.addEventListener('activate', event => {
 
 // Fetch event - serve from cache, then network
 self.addEventListener('fetch', event => {
+    // Only process valid URLs
+    if (!isValidUrl(event.request.url)) {
+        return;
+    }
+
     const url = new URL(event.request.url);
     
-    // Special handling for workout JSON files
+    // Handle workout JSON files
     if (url.pathname.includes('/workouts/')) {
         event.respondWith(
             caches.match(event.request)
@@ -75,14 +81,15 @@ self.addEventListener('fetch', event => {
                                 return response;
                             }
                             const responseToCache = response.clone();
-                            caches.open(DYNAMIC_CACHE)
-                                .then(cache => {
-                                    cache.put(event.request, responseToCache);
-                                });
+                            if (isValidUrl(event.request.url)) {
+                                caches.open(DYNAMIC_CACHE)
+                                    .then(cache => {
+                                        cache.put(event.request, responseToCache);
+                                    });
+                            }
                             return response;
                         })
                         .catch(() => {
-                            // Return a custom response for workout files that don't exist
                             if (url.pathname.includes('.json')) {
                                 return new Response(JSON.stringify({
                                     error: 'Workout not found',
@@ -112,10 +119,12 @@ self.addEventListener('fetch', event => {
                             return response;
                         }
                         const responseToCache = response.clone();
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                cache.put(event.request, responseToCache);
-                            });
+                        if (isValidUrl(event.request.url)) {
+                            caches.open(CACHE_NAME)
+                                .then(cache => {
+                                    cache.put(event.request, responseToCache);
+                                });
+                        }
                         return response;
                     })
                     .catch(error => {
@@ -133,12 +142,10 @@ self.addEventListener('sync', event => {
     }
 });
 
-// Function to sync workout data
 async function syncWorkoutData() {
     try {
         const offlineData = await localforage.getItem('offlineWorkouts');
         if (offlineData) {
-            // Process offline data here
             await localforage.removeItem('offlineWorkouts');
         }
     } catch (error) {
@@ -146,7 +153,6 @@ async function syncWorkoutData() {
     }
 }
 
-// Handle service worker updates
 self.addEventListener('message', event => {
     if (event.data.action === 'skipWaiting') {
         self.skipWaiting();
