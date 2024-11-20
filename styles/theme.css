@@ -1,0 +1,21 @@
+:root {
+  --background-dark: #121212;
+  --card-background: #1E1E1E;
+  --gradient-start: #6B46C1;
+  --gradient-end: #2B6CB0;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --spacing-base: 1.5rem;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --transition-base: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes headerEntrance {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
