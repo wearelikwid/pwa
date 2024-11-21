@@ -32,13 +32,16 @@ function createWorkoutCard(workout) {
     const card = document.createElement('div');
     card.className = 'workout-card';
     
+    // Create a safe version of the workout object for the onclick handler
+    const workoutStr = JSON.stringify(workout).replace(/'/g, "\'").replace(/"/g, '\"');
+    
     card.innerHTML = `
         <h3>${workout.name}</h3>
         <div class='workout-meta'>
             <span>${workout.type}</span>
         </div>
         <div class='workout-actions'>
-            <button class='button primary' onclick='startWorkout(${JSON.stringify(workout)})'>
+            <button class='button primary' onclick='startWorkout(JSON.parse("${workoutStr}"))'>
                 Start Workout
             </button>
         </div>
