@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Add back button functionality
+    document.querySelector('.back-button').addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+
     const urlParams = new URLSearchParams(window.location.search);
     const week = urlParams.get('week');
     const type = urlParams.get('type');
