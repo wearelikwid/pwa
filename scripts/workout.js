@@ -88,6 +88,20 @@ function displayWorkout(workout) {
 }
 
 function createExerciseListItem(exercise) {
+    // Format reps/duration text
+    let repsText = '';
+    if (exercise.reps) {
+        // Check if it contains time-related words
+        if (exercise.reps.toLowerCase().includes('sec') || 
+            exercise.reps.toLowerCase().includes('min') ||
+            exercise.reps.toLowerCase().includes('minute')) {
+            repsText = exercise.reps;
+        } else {
+            // Add 'reps' only for numerical values
+            repsText = isNaN(exercise.reps) ? exercise.reps : `${exercise.reps} reps`;
+        }
+    }
+
     return `
         <li class="exercise-item">
             <div class="exercise-name">
@@ -95,7 +109,7 @@ function createExerciseListItem(exercise) {
                 ${exercise.notes ? `<div class="exercise-notes">${exercise.notes}</div>` : ''}
             </div>
             <div class="exercise-details">
-                <div class="reps-duration">${exercise.reps || ''}</div>
+                <div class="reps-duration">${repsText}</div>
                 <div class="rounds">${exercise.rounds ? `${exercise.rounds} rounds` : ''}</div>
             </div>
         </li>
