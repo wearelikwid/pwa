@@ -7,51 +7,37 @@ function initializeForm() {
     form.addEventListener('submit', handleFormSubmit);
 }
 
-function addExercise() {
-    const exercisesList = document.getElementById('exercises-list');
-    const exerciseId = Date.now(); // Unique ID for the exercise
-
-    const exerciseHtml = `
-        <div class='exercise-item' id='exercise-${exerciseId}'>
-            <div class='exercise-header'>
-                <h3>Exercise ${exercisesList.children.length + 1}</h3>
-                <button type='button' class='button secondary' onclick='removeExercise(${exerciseId})'>Remove</button>
-            </div>
-            <div class='exercise-fields'>
-                <div class='form-group'>
-                    <label>Exercise Name</label>
-                    <input type='text' name='exercise-name-${exerciseId}' required>
-                </div>
-                <div class='form-group'>
-                    <label>Sets</label>
-                    <input type='number' name='exercise-sets-${exerciseId}' min='1' required>
-                </div>
-                <div class='form-group'>
-                    <label>Reps</label>
-                    <input type='number' name='exercise-reps-${exerciseId}' min='1' required>
-                </div>
-                <div class='form-group'>
-                    <label>Notes</label>
-                    <input type='text' name='exercise-notes-${exerciseId}'>
-                </div>
-            </div>
-        </div>
-    `;
-
-    exercisesList.insertAdjacentHTML('beforeend', exerciseHtml);
-}
-
-function removeExercise(exerciseId) {
-    const exercise = document.getElementById(`exercise-${exerciseId}`);
-    exercise.remove();
-    updateExerciseNumbers();
-}
-
-function updateExerciseNumbers() {
-    const exercises = document.querySelectorAll('.exercise-item h3');
-    exercises.forEach((exercise, index) => {
-        exercise.textContent = `Exercise ${index + 1}`;
+function addSection() {
+    const sectionsContainer = document.getElementById('workout-sections');
+    const sectionTemplate = document.getElementById('section-template');
+    const sectionElement = document.importNode(sectionTemplate.content, true);
+    
+    // Add event listeners for this section
+    const removeButton = sectionElement.querySelector('.remove-section');
+    removeButton.addEventListener('click', function(e) {
+        e.target.closest('.workout-section').remove();
     });
+
+    const addExerciseButton = sectionElement.querySelector('.add-exercise');
+    addExerciseButton.addEventListener('click', function(e) {
+        const exercisesList = e.target.previousElementSibling;
+        addExerciseToSection(exercisesList);
+    });
+
+    sectionsContainer.appendChild(sectionElement);
+}
+
+function addExerciseToSection(exercisesList) {
+    const exerciseTemplate = document.getElementById('exercise-template');
+    const exerciseElement = document.importNode(exerciseTemplate.content, true);
+    
+    // Add event listener for exercise removal
+    const removeButton = exerciseElement.querySelector('.remove-exercise');
+    removeButton.addEventListener('click', function(e) {
+        e.target.closest('.exercise-item').remove();
+    });
+
+    exercisesList.appendChild(exerciseElement);
 }
 
 function handleFormSubmit(event) {
@@ -60,29 +46,43 @@ function handleFormSubmit(event) {
     const workoutData = {
         name: document.getElementById('workout-name').value,
         type: document.getElementById('workout-type').value,
-        description: document.getElementById('workout-description').value,
-        exercises: getExercisesData(),
+        sections: getSectionsData(),
         createdAt: new Date().toISOString()
     };
 
-    // Store in localStorage for now
+    // Store in localStorage
     saveWorkout(workoutData);
     
     // Redirect to workouts list
     window.location.href = 'workouts.html';
 }
 
-function getExercisesData() {
+function getSectionsData() {
+    const sections = [];
+    const sectionElements = document.querySelectorAll('.workout-section');
+
+    sectionElements.forEach(sectionElement => {
+        const sectionData = {
+            type: sectionElement.querySelector('.section-type').value,
+            name: sectionElement.querySelector('.section-name').value,
+            exercises: getExercisesDataForSection(sectionElement)
+        };
+        sections.push(sectionData);
+    });
+
+    return sections;
+}
+
+function getExercisesDataForSection(sectionElement) {
     const exercises = [];
-    const exerciseItems = document.querySelectorAll('.exercise-item');
+    const exerciseItems = sectionElement.querySelectorAll('.exercise-item');
 
     exerciseItems.forEach(item => {
-        const id = item.id.split('-')[1];
         exercises.push({
-            name: document.querySelector(`[name="exercise-name-${id}"]`).value,
-            sets: parseInt(document.querySelector(`[name="exercise-sets-${id}"]`).value),
-            reps: parseInt(document.querySelector(`[name="exercise-reps-${id}"]`).value),
-            notes: document.querySelector(`[name="exercise-notes-${id}"]`).value
+            name: item.querySelector('.exercise-name').value,
+            rounds: parseInt(item.querySelector('.exercise-rounds').value),
+            reps: parseInt(item.querySelector('.exercise-reps').value),
+            notes: item.querySelector('.exercise-notes').value
         });
     });
 
@@ -94,3 +94,9 @@ function saveWorkout(workoutData) {
     workouts.push(workoutData);
     localStorage.setItem('workouts', JSON.stringify(workouts));
 }
+
+// Add initial section when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Add first section automatically
+    addSection();
+});
