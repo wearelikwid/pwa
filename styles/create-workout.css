@@ -1,10 +1,11 @@
-/* Workout form styling */
+/* Main form container */
 .workout-form {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* Form groups */
 .form-group {
     margin-bottom: 24px;
 }
@@ -28,27 +29,36 @@
     font-size: 1rem;
 }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Exercise section styling */
-.exercises-section {
+/* Workout sections styling */
+.workout-sections {
     margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.exercises-section h2 {
-    margin-bottom: 16px;
-    color: var(--text-color);
+.workout-section {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.section-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Exercise list styling */
+.exercises-list {
+    margin: 24px 0;
+}
+
 .exercise-item {
-    background: var(--card-background);
-    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 16px;
 }
@@ -57,13 +67,50 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.exercise-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.1rem;
 }
 
 .exercise-fields {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+/* Button styling */
+.button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
+
+.button.primary {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: var(--text-color);
+}
+
+.button.secondary {
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.remove-section,
+.remove-exercise {
+    color: #ff4444;
+    border-color: #ff4444;
 }
 
 /* Form actions */
@@ -78,6 +125,10 @@
 @media (max-width: 768px) {
     .workout-form {
         padding: 16px;
+    }
+
+    .section-header {
+        grid-template-columns: 1fr;
     }
 
     .exercise-fields {
