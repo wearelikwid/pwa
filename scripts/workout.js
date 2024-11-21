@@ -1,15 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Add back button functionality
-    document.querySelector('.back-button').addEventListener('click', () => {
-        window.location.href = 'index.html';
-    });
-
     const urlParams = new URLSearchParams(window.location.search);
     const week = urlParams.get('week');
     const type = urlParams.get('type');
 
     document.getElementById('workout-title').textContent = `Week ${week} - ${formatWorkoutType(type)}`;
 
+    // Get the existing button instead of creating a new one
     const completeButton = document.getElementById('complete-workout-button');
 
     // Check if workout is already completed
@@ -24,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Add click handler for completion
     completeButton.addEventListener('click', function() {
         toggleWorkoutCompletion(week, type, this);
     });
@@ -54,10 +51,20 @@ function displayWorkout(workout) {
     const workoutContainer = document.getElementById('workout-container');
     let html = '';
 
+    const headerTemplate = `
+        <div class="exercise-header">
+            <div class="exercise-column">Exercise</div>
+            <div class="exercise-column">Reps/Duration</div>
+            <div class="exercise-column">Notes</div>
+            <div class="exercise-column">Weight</div>
+            <div class="exercise-column">Rounds</div>
+        </div>
+    `;
+
     // Display warmup if it exists
     if (workout.warmup && workout.warmup.exercises) {
-        html += '<div class="section">';
-        html += '<h2>Warm-up</h2>';
+        html += '<div class="section"><h2>Warm-up</h2>';
+        html += headerTemplate;
         html += '<ul class="exercise-list">';
         workout.warmup.exercises.forEach(exercise => {
             html += createExerciseListItem(exercise);
@@ -65,11 +72,11 @@ function displayWorkout(workout) {
         html += '</ul></div>';
     }
 
-    // Display multiple circuits if they exist
-    if (workout.circuits && Array.isArray(workout.circuits)) {
+    // Display circuits if they exist
+    if (workout.circuits) {
         workout.circuits.forEach((circuit, index) => {
-            html += `<div class="section">`;
-            html += `<h2>${circuit.name || `Circuit ${index + 1}`}</h2>`;
+            html += `<div class="section"><h2>${circuit.name || `Circuit ${index + 1}`}</h2>`;
+            html += headerTemplate;
             html += '<ul class="exercise-list">';
             circuit.exercises.forEach(exercise => {
                 html += createExerciseListItem(exercise);
@@ -77,11 +84,11 @@ function displayWorkout(workout) {
             html += '</ul></div>';
         });
     }
-    
+
     // Display single circuit if it exists
     if (workout.circuit && workout.circuit.exercises) {
-        html += '<div class="section">';
-        html += `<h2>Circuit</h2>`;
+        html += '<div class="section"><h2>Circuit</h2>';
+        html += headerTemplate;
         html += '<ul class="exercise-list">';
         workout.circuit.exercises.forEach(exercise => {
             html += createExerciseListItem(exercise);
@@ -93,30 +100,13 @@ function displayWorkout(workout) {
 }
 
 function createExerciseListItem(exercise) {
-    // Format reps/duration text
-    let repsText = '';
-    if (exercise.reps) {
-        // Check if it contains time-related words
-        if (exercise.reps.toLowerCase().includes('sec') || 
-            exercise.reps.toLowerCase().includes('min') ||
-            exercise.reps.toLowerCase().includes('minute')) {
-            repsText = exercise.reps;
-        } else {
-            // Add 'reps' only for numerical values
-            repsText = isNaN(exercise.reps) ? exercise.reps : `${exercise.reps} reps`;
-        }
-    }
-
     return `
         <li class="exercise-item">
-            <div class="exercise-name">
-                ${exercise.exercise}
-                ${exercise.notes ? `<div class="exercise-notes">${exercise.notes}</div>` : ''}
-            </div>
-            <div class="exercise-details">
-                <div class="reps-duration">${repsText}</div>
-                <div class="rounds">${exercise.rounds ? `${exercise.rounds} rounds` : ''}</div>
-            </div>
+            <div class="exercise-column exercise-name">${exercise.exercise}</div>
+            <div class="exercise-column" data-label="Reps/Duration">${exercise.reps || '-'}</div>
+            <div class="exercise-column" data-label="Notes">${exercise.notes || '-'}</div>
+            <div class="exercise-column" data-label="Weight">${exercise.weight || '-'}</div>
+            <div class="exercise-column" data-label="Rounds">${exercise.rounds || '-'}</div>
         </li>
     `;
 }
