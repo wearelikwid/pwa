@@ -49,18 +49,39 @@ function displayWorkout(workout) {
     const workoutContainer = document.getElementById('workout-container');
     let html = '';
 
-    // Display circuits if they exist
-    if (workout.circuits) {
-        workout.circuits.forEach((circuit, index) => {
-            html += `
-                <div class="section">
-                    <h2>Circuit ${index + 1}</h2>
-                    <ul class="exercise-list">
-                        ${circuit.exercises.map(exercise => createExerciseListItem(exercise)).join('')}
-                    </ul>
-                </div>
-            `;
+    // Display warmup if it exists
+    if (workout.warmup && workout.warmup.exercises) {
+        html += '<div class="section">';
+        html += '<h2>Warm-up</h2>';
+        html += '<ul class="exercise-list">';
+        workout.warmup.exercises.forEach(exercise => {
+            html += createExerciseListItem(exercise);
         });
+        html += '</ul></div>';
+    }
+
+    // Display multiple circuits if they exist
+    if (workout.circuits && Array.isArray(workout.circuits)) {
+        workout.circuits.forEach((circuit, index) => {
+            html += `<div class="section">`;
+            html += `<h2>${circuit.name || `Circuit ${index + 1}`}</h2>`;
+            html += '<ul class="exercise-list">';
+            circuit.exercises.forEach(exercise => {
+                html += createExerciseListItem(exercise);
+            });
+            html += '</ul></div>';
+        });
+    }
+    
+    // Display single circuit if it exists
+    if (workout.circuit && workout.circuit.exercises) {
+        html += '<div class="section">';
+        html += `<h2>Circuit</h2>`;
+        html += '<ul class="exercise-list">';
+        workout.circuit.exercises.forEach(exercise => {
+            html += createExerciseListItem(exercise);
+        });
+        html += '</ul></div>';
     }
 
     workoutContainer.innerHTML = html;
@@ -98,10 +119,12 @@ function toggleWorkoutCompletion(week, type, button) {
         workout.week === week && workout.type === type);
 
     if (workoutIndex === -1) {
+        // Add to completed workouts
         completedWorkouts.push({ week, type });
         button.classList.add('active');
         button.innerHTML = 'Completed';
     } else {
+        // Remove from completed workouts
         completedWorkouts.splice(workoutIndex, 1);
         button.classList.remove('active');
         button.innerHTML = 'Mark as Complete';
