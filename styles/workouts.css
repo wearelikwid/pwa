@@ -1,18 +1,15 @@
-/* Base variables from main theme */
-:root {
-    --gradient-start: #7E57C2;
-    --gradient-end: #2196F3;
-    --background-color: #121212;
-    --card-background: #1E1E1E;
-    --text-color: #ffffff;
-    --secondary-text: rgba(255, 255, 255, 0.7);
-}
-
-/* Workouts page specific styling */
-.workouts-container {
+/* Workouts page layout */
+.section {
+    padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
 }
 
 /* Grid layout for workout cards */
@@ -20,15 +17,16 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
-    margin-top: 32px;
+    padding: 16px 0;
 }
 
-/* Individual workout card */
+/* Workout card styling */
 .workout-card {
     background: var(--card-background);
     border-radius: 12px;
-    padding: 20px;
+    padding: 24px;
     transition: transform 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .workout-card:hover {
@@ -38,67 +36,80 @@
 .workout-card h3 {
     margin: 0 0 12px 0;
     color: var(--text-color);
-    font-size: 1.2em;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .workout-meta {
-    font-size: 0.9em;
+    font-size: 0.9rem;
     color: var(--secondary-text);
     margin-bottom: 16px;
 }
 
-/* Create workout section */
-.create-workout-section {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    padding: 32px;
-    border-radius: 12px;
-    margin-bottom: 32px;
-    text-align: center;
+.workout-sections {
+    margin: 16px 0;
+    color: var(--secondary-text);
+    font-size: 0.9rem;
 }
 
-.create-workout-section h2 {
-    color: var(--text-color);
-    margin: 0 0 16px 0;
-}
-
-/* Action buttons */
 .workout-actions {
     display: flex;
     gap: 12px;
     margin-top: 16px;
 }
 
-.workout-button {
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--secondary-text);
+}
+
+.empty-state p {
+    margin-bottom: 24px;
+}
+
+/* Button styling */
+.button {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
-    font-weight: 500;
+    font-size: 1rem;
     cursor: pointer;
     transition: opacity 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
 }
 
-.workout-button.primary {
+.button:hover {
+    opacity: 0.9;
+}
+
+.button.primary {
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     color: var(--text-color);
 }
 
-.workout-button.secondary {
-    background: var(--card-background);
-    color: var(--text-color);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
-    .workouts-container {
+    .section {
         padding: 16px;
     }
-    
+
+    .section-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .section-header .button {
+        width: 100%;
+        text-align: center;
+    }
+
     .workouts-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .create-workout-section {
-        padding: 24px;
+        gap: 16px;
     }
 }
