@@ -1,3 +1,8 @@
+/* Root variables */
+:root {
+    --success-color: #4CAF50;
+}
+
 /* Main container styling */
 .container {
     max-width: 800px;
@@ -103,11 +108,32 @@
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .button.primary:hover {
     opacity: 0.9;
+}
+
+.button.primary.completed {
+    background: var(--success-color);
+    transform: scale(1.05);
+}
+
+.button.primary:disabled {
+    opacity: 0.8;
+    cursor: default;
+}
+
+/* Success animation */
+@keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.success-animation {
+    animation: successPulse 0.5s ease-out;
 }
 
 /* Responsive design */
