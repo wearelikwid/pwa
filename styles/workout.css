@@ -1,12 +1,3 @@
-:root {
-    --gradient-start: #7E57C2;
-    --gradient-end: #2196F3;
-    --background-color: #121212;
-    --card-background: #1E1E1E;
-    --text-color: #ffffff;
-    --secondary-text: rgba(255, 255, 255, 0.7);
-}
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -32,37 +23,13 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* Add styles for header content and back button */
-.header-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.back-button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s;
-}
-
-.back-button:hover {
-    opacity: 0.8;
-}
-
 .header-buttons {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-/* Keep all existing styles below */
+/* Simplified completion button styling */
 .complete-workout-button {
     padding: 10px 20px;
     border: none;
@@ -78,6 +45,7 @@ body {
     background-color: #404040;
 }
 
+/* Simple green background when active */
 .complete-workout-button.active {
     background-color: #4CAF50;
     color: white;
@@ -179,12 +147,6 @@ h2 {
         flex-direction: column;
         gap: 15px;
         text-align: center;
-    }
-
-    /* Update mobile styles for header content */
-    .header-content {
-        width: 100%;
-        justify-content: center;
     }
 
     .header-buttons {
