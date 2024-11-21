@@ -4,18 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadWorkout() {
-    // Get the current workout from localStorage
     const workout = JSON.parse(localStorage.getItem('currentWorkout'));
     if (!workout) {
         window.location.href = 'workouts.html';
         return;
     }
 
-    // Set workout name and type
     document.getElementById('workout-name').textContent = workout.name;
     document.getElementById('workout-type').textContent = workout.type;
-
-    // Load sections
     displaySections(workout.sections);
 }
 
@@ -33,11 +29,9 @@ function createSectionElement(section, sectionNumber) {
     const sectionTemplate = document.getElementById('section-template');
     const sectionElement = document.importNode(sectionTemplate.content, true);
     
-    // Set section title
     const titleElement = sectionElement.querySelector('.section-title');
     titleElement.textContent = `${section.type} ${sectionNumber}`;
 
-    // Add exercises
     const exercisesList = sectionElement.querySelector('.exercises-list');
     section.exercises.forEach(exercise => {
         const exerciseElement = createExerciseElement(exercise);
@@ -51,10 +45,8 @@ function createExerciseElement(exercise) {
     const exerciseTemplate = document.getElementById('exercise-template');
     const exerciseElement = document.importNode(exerciseTemplate.content, true);
     
-    // Set exercise details
     exerciseElement.querySelector('.exercise-name').textContent = exercise.name;
     
-    // Only show notes if they exist
     const notesElement = exerciseElement.querySelector('.exercise-notes');
     if (exercise.notes) {
         notesElement.textContent = exercise.notes;
@@ -62,7 +54,6 @@ function createExerciseElement(exercise) {
         notesElement.style.display = 'none';
     }
 
-    // Set reps and rounds
     const repsElement = exerciseElement.querySelector('.reps');
     const roundsElement = exerciseElement.querySelector('.rounds');
     
@@ -78,8 +69,16 @@ function initializeCompleteButton() {
 }
 
 function markWorkoutComplete() {
+    const completeButton = document.getElementById('complete-workout');
     const currentWorkout = JSON.parse(localStorage.getItem('currentWorkout'));
     
+    // Prevent double-clicking
+    completeButton.disabled = true;
+    
+    // Update button appearance
+    completeButton.classList.add('completed');
+    completeButton.textContent = 'Workout Completed!';
+
     // Get all workouts
     let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
     
@@ -99,6 +98,8 @@ function markWorkoutComplete() {
     // Save updated workouts
     localStorage.setItem('workouts', JSON.stringify(workouts));
     
-    // Redirect to workouts list
-    window.location.href = 'workouts.html';
+    // Delay redirect to show completion state
+    setTimeout(() => {
+        window.location.href = 'workouts.html';
+    }, 1500);
 }
