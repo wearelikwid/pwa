@@ -115,7 +115,8 @@ function createExerciseListItem(exercise) {
             </div>
             <div class="exercise-details">
                 <div class="reps-duration">${repsText}</div>
-                <div class="rounds">${exercise.rounds ? `${exercise.rounds} rounds` : ''}</div>
+                ${exercise.weight ? `<div class="weight">${exercise.weight}</div>` : ''}
+                ${exercise.rounds ? `<div class="rounds">${exercise.rounds} rounds</div>` : ''}
             </div>
         </li>
     `;
