@@ -1,0 +1,86 @@
+/* Workout form styling */
+.workout-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Exercise section styling */
+.exercises-section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exercises-section h2 {
+    margin-bottom: 16px;
+    color: var(--text-color);
+}
+
+/* Exercise list styling */
+.exercise-item {
+    background: var(--card-background);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.exercise-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Form actions */
+.form-actions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .workout-form {
+        padding: 16px;
+    }
+
+    .exercise-fields {
+        grid-template-columns: 1fr;
+    }
+}
