@@ -1,0 +1,104 @@
+/* Base variables from main theme */
+:root {
+    --gradient-start: #7E57C2;
+    --gradient-end: #2196F3;
+    --background-color: #121212;
+    --card-background: #1E1E1E;
+    --text-color: #ffffff;
+    --secondary-text: rgba(255, 255, 255, 0.7);
+}
+
+/* Workouts page specific styling */
+.workouts-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Grid layout for workout cards */
+.workouts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+/* Individual workout card */
+.workout-card {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s ease;
+}
+
+.workout-card:hover {
+    transform: translateY(-4px);
+}
+
+.workout-card h3 {
+    margin: 0 0 12px 0;
+    color: var(--text-color);
+    font-size: 1.2em;
+}
+
+.workout-meta {
+    font-size: 0.9em;
+    color: var(--secondary-text);
+    margin-bottom: 16px;
+}
+
+/* Create workout section */
+.create-workout-section {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    padding: 32px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.create-workout-section h2 {
+    color: var(--text-color);
+    margin: 0 0 16px 0;
+}
+
+/* Action buttons */
+.workout-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.workout-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.workout-button.primary {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: var(--text-color);
+}
+
+.workout-button.secondary {
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .workouts-container {
+        padding: 16px;
+    }
+    
+    .workouts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .create-workout-section {
+        padding: 24px;
+    }
+}
