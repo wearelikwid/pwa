@@ -51,5 +51,5 @@ function startWorkout(workout) {
     // Store the selected workout in localStorage
     localStorage.setItem('currentWorkout', JSON.stringify(workout));
     // Navigate to the workout execution page
-    window.location.href = 'execute-workout.html';
+    window.location.href = 'start-workout.html';
 }
