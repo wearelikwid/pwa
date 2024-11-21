@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='theme-color' content='#242424'>
+    <meta name='description' content='El Forma - Create and manage your workouts and programs'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <meta name='mobile-web-app-capable' content='yes'>
+    <meta name='apple-mobile-web-app-status-bar-style' content='black'>
+    <meta name='apple-mobile-web-app-title' content='El Forma'>
+    <title>El Forma</title>
+    
+    <!-- Manifest -->
+    <link rel='manifest' href='manifest.json'>
+    
+    <!-- Favicon and App Icons -->
+    <link rel='icon' type='image/png' href='icons/icon-192x192.png'>
+    <link rel='apple-touch-icon' href='icons/icon-192x192.png'>
+    <link rel='apple-touch-icon' sizes='192x192' href='icons/icon-192x192.png'>
+    <link rel='apple-touch-icon' sizes='512x512' href='icons/icon-512x512.png'>
+    
+    <!-- Styles -->
+    <link rel='stylesheet' href='styles/main.css'>
+</head>
+<body>
+    <div class='container'>
+        <header class='app-header'>
+            <h1>El Forma</h1>
+            <p class='app-description'>Create and manage your workouts and programs</p>
+        </header>
+
+        <main class='features-grid'>
+            <section class='feature-card'>
+                <h2>Workouts</h2>
+                <div class='button-group'>
+                    <a href='workouts.html' class='button'>View Workouts</a>
+                    <a href='create-workout.html' class='button primary'>Create Workout</a>
+                </div>
+            </section>
+
+            <section class='feature-card'>
+                <h2>Programs</h2>
+                <div class='button-group'>
+                    <a href='programs.html' class='button'>View Programs</a>
+                    <a href='create-program.html' class='button primary'>Create Program</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src='scripts/main.js'></script>
+</body>
+</html>
