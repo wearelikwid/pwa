@@ -32,23 +32,10 @@ function createWorkoutCard(workout) {
     const card = document.createElement('div');
     card.className = 'workout-card';
     
-    // Create section summary
-    const sectionSummary = workout.sections.map(section => {
-        const exerciseCount = section.exercises.length;
-        return `${section.type} (${exerciseCount} exercises)`;
-    }).join(' • ');
-
-    // Format date
-    const createdDate = new Date(workout.createdAt).toLocaleDateString();
-    
     card.innerHTML = `
         <h3>${workout.name}</h3>
         <div class='workout-meta'>
-            <span>${workout.type}</span> • 
-            <span>Created: ${createdDate}</span>
-        </div>
-        <div class='workout-sections'>
-            <p>${sectionSummary}</p>
+            <span>${workout.type}</span>
         </div>
         <div class='workout-actions'>
             <button class='button primary' onclick='startWorkout(${JSON.stringify(workout)})'>
@@ -63,6 +50,6 @@ function createWorkoutCard(workout) {
 function startWorkout(workout) {
     // Store the selected workout in localStorage
     localStorage.setItem('currentWorkout', JSON.stringify(workout));
-    // Navigate to the workout execution page (to be implemented)
+    // Navigate to the workout execution page
     window.location.href = 'execute-workout.html';
 }
