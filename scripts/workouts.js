@@ -32,8 +32,9 @@ function createWorkoutCard(workout) {
     const card = document.createElement('div');
     card.className = 'workout-card';
     
-    // Create a safe version of the workout object for the onclick handler
-    const workoutStr = JSON.stringify(workout).replace(/'/g, "\'").replace(/"/g, '\"');
+    // Create a data attribute to store the workout ID
+    const workoutId = workout.createdAt; // Using createdAt as a unique identifier
+    card.setAttribute('data-workout-id', workoutId);
     
     card.innerHTML = `
         <h3>${workout.name}</h3>
@@ -41,18 +42,20 @@ function createWorkoutCard(workout) {
             <span>${workout.type}</span>
         </div>
         <div class='workout-actions'>
-            <button class='button primary' onclick='startWorkout(JSON.parse("${workoutStr}"))'>
+            <button class='button primary' onclick='startWorkout("${workoutId}")'>
                 Start Workout
             </button>
         </div>
     `;
-    
     return card;
 }
-
-function startWorkout(workout) {
-    // Store the selected workout in localStorage
-    localStorage.setItem('currentWorkout', JSON.stringify(workout));
-    // Navigate to the workout execution page
-    window.location.href = 'start-workout.html';
+function startWorkout(workoutId) {
+    // Get all workouts and find the matching one
+    const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+    const workout = workouts.find(w => w.createdAt === workoutId);
+    
+    if (workout) {
+        localStorage.setItem('currentWorkout', JSON.stringify(workout));
+        window.location.href = 'start-workout.html';
+    }
 }
