@@ -1,3 +1,8 @@
+/* Root variables */
+:root {
+    --success-color: #4CAF50;
+}
+
 /* Workouts page layout */
 .section {
     padding: 20px;
@@ -22,15 +27,29 @@
 
 /* Workout card styling */
 .workout-card {
+    position: relative;
     background: var(--card-background);
     border-radius: 12px;
     padding: 24px;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .workout-card:hover {
     transform: translateY(-4px);
+}
+
+.workout-card.completed {
+    border-color: var(--success-color);
+}
+
+.workout-card.completed::before {
+    content: '✓';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: var(--success-color);
+    font-size: 1.2rem;
 }
 
 .workout-card h3 {
@@ -46,27 +65,10 @@
     margin-bottom: 16px;
 }
 
-.workout-sections {
-    margin: 16px 0;
-    color: var(--secondary-text);
-    font-size: 0.9rem;
-}
-
 .workout-actions {
     display: flex;
     gap: 12px;
     margin-top: 16px;
-}
-
-/* Empty state styling */
-.empty-state {
-    text-align: center;
-    padding: 48px 20px;
-    color: var(--secondary-text);
-}
-
-.empty-state p {
-    margin-bottom: 24px;
 }
 
 /* Button styling */
@@ -76,7 +78,7 @@
     border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
 }
@@ -88,6 +90,17 @@
 .button.primary {
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     color: var(--text-color);
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--secondary-text);
+}
+
+.empty-state p {
+    margin-bottom: 24px;
 }
 
 /* Responsive design */
