@@ -36,7 +36,7 @@
 
 /* Duration input specific styling */
 .form-group input[type="number"] {
-    width: 200px;
+    width: 120px; /* Made smaller for better visual */
 }
 
 /* Program weeks container */
@@ -44,6 +44,49 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+/* Week styling */
+.program-week {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.week-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.week-title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+/* Days container */
+.week-days {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Day styling */
+.program-day {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
 }
 
 /* Button styling */
@@ -68,6 +111,11 @@
     color: var(--text-color);
 }
 
+.button.remove-day {
+    padding: 12px;
+    min-width: 40px;
+}
+
 /* Form actions */
 .form-actions {
     margin-top: 32px;
@@ -79,8 +127,27 @@
     .container {
         padding: 16px;
     }
-    
+
+    .program-week {
+        padding: 20px;
+    }
+
+    .program-day {
+        padding: 16px;
+    }
+
     .form-group input[type="number"] {
+        width: 100%;
+    }
+
+    .week-header,
+    .day-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .button {
         width: 100%;
     }
 }
