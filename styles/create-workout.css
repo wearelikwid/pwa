@@ -14,7 +14,7 @@
 
 /* Form group styling */
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
@@ -43,7 +43,7 @@
     margin-bottom: 24px;
 }
 
-/* Section header with dropdown and remove button */
+/* Fix section header alignment */
 .section-header {
     display: flex;
     align-items: center;
@@ -68,7 +68,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .exercise-header h3 {
@@ -77,19 +77,18 @@
     color: var(--text-color);
 }
 
-/* Exercise fields layout */
+/* Fix exercise fields layout */
 .exercise-fields {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
-/* Make exercise name full width */
-.exercise-fields .form-group:first-child {
-    grid-column: 1 / -1;
+.exercise-fields .form-group {
+    margin-bottom: 0;
 }
 
-/* Button styling */
+/* Buttons styling */
 .button {
     padding: 12px 24px;
     border: none;
@@ -97,45 +96,42 @@
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    text-align: center;
 }
 
 .button.primary {
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    color: var(--text-color);
-}
-
-.button.secondary {
-    background: var(--card-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
+    border: none;
 }
 
 .button:hover {
     opacity: 0.9;
 }
 
-/* Action buttons */
+/* Form actions */
 .form-actions {
-    margin-top: 24px;
-    text-align: center;
+    margin-top: 32px;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .container {
-        padding: 16px;
-    }
-
-    .section-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
+/* Enhanced responsive design */
+@media (min-width: 768px) {
     .exercise-fields {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .exercise-fields .form-group:first-child {
+        grid-column: 1 / -1;
     }
 
     .button {
-        width: 100%;
+        width: auto;
+    }
+
+    .section-header {
+        flex-direction: row;
     }
 }
