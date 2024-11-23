@@ -76,18 +76,6 @@ function createDayElement(weekNumber, dayNumber) {
     return dayDiv;
 }
 
-// Reuse workout creation functions with slight modifications
-function addSection(weekNumber, dayNumber) {
-    const sectionsContainer = document.getElementById(\`workout-sections-w\${weekNumber}d\${dayNumber}\`);
-    const sectionElement = createSectionElement();
-    sectionsContainer.appendChild(sectionElement);
-}
-
-function createSectionElement() {
-    const sectionTemplate = document.getElementById('section-template');
-    return document.importNode(sectionTemplate.content, true);
-}
-
 function removeDay(button) {
     const dayElement = button.closest('.program-day');
     dayElement.remove();
@@ -166,4 +154,38 @@ function collectWorkoutData(dayElement) {
         name: workoutName,
         sections: sections
     };
+}
+
+// Reuse workout creation functions
+function addSection(weekNumber, dayNumber) {
+    const sectionsContainer = document.getElementById(\`workout-sections-w\${weekNumber}d\${dayNumber}\`);
+    const sectionElement = createSectionElement();
+    sectionsContainer.appendChild(sectionElement);
+}
+
+function createSectionElement() {
+    const sectionTemplate = document.getElementById('section-template');
+    return document.importNode(sectionTemplate.content, true);
+}
+
+function addExercise(button) {
+    const sectionElement = button.closest('.workout-section');
+    const exercisesList = sectionElement.querySelector('.exercises-list');
+    const exerciseElement = createExerciseElement();
+    exercisesList.appendChild(exerciseElement);
+}
+
+function createExerciseElement() {
+    const exerciseTemplate = document.getElementById('exercise-template');
+    return document.importNode(exerciseTemplate.content, true);
+}
+
+function removeExercise(button) {
+    const exerciseItem = button.closest('.exercise-item');
+    exerciseItem.remove();
+}
+
+function removeSection(button) {
+    const sectionElement = button.closest('.workout-section');
+    sectionElement.remove();
 }
