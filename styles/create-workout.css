@@ -66,24 +66,27 @@
     margin-bottom: 16px;
 }
 
-/* Exercise name group */
-.exercise-name-group {
+.exercise-item .form-group {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 16px;
 }
 
+.exercise-item .form-group:last-child {
+    margin-bottom: 0;
+}
+
 /* Number fields */
 .number-fields {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 16px;
     margin-bottom: 16px;
+    padding: 0 20px;
 }
 
 .number-fields input {
-    width: 100%;
+    width: 80px;
     padding: 12px;
     background: var(--card-background);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -126,7 +129,7 @@
     text-align: center;
 }
 
-/* Enhanced mobile responsive design */
+/* Responsive design */
 @media (max-width: 768px) {
     .container {
         padding: 16px;
@@ -149,19 +152,20 @@
         padding: 16px;
     }
 
+    .exercise-item .form-group {
+        margin-bottom: 12px;
+        padding: 0 16px;
+    }
+
     .number-fields {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        padding: 0 16px;
         gap: 12px;
-        margin: 0 0 16px 0;
+        margin-bottom: 12px;
     }
 
     .number-fields input {
-        width: 100%;
+        flex: 1;
         min-width: 0;
-    }
-
-    .exercise-name-group {
-        margin-bottom: 16px;
+        max-width: 100%;
     }
 }
