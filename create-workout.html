@@ -58,7 +58,6 @@
         <div class='workout-section'>
             <div class='section-header'>
                 <div class='form-group'>
-                    <label>Section Type</label>
                     <select class='section-type'>
                         <option value='circuit'>Circuit</option>
                         <option value='hiit'>HIIT</option>
@@ -66,7 +65,7 @@
                         <option value='amrap'>AMRAP</option>
                     </select>
                 </div>
-                <button type='button' class='button secondary remove-section'>Remove Section</button>
+                <button type='button' class='button secondary remove-section'>-</button>
             </div>
 
             <div class='exercises-list'>
@@ -80,26 +79,21 @@
     <!-- Exercise Template -->
     <template id='exercise-template'>
         <div class='exercise-item'>
-            <div class='exercise-header'>
-                <h3>Exercise</h3>
-                <button type='button' class='button secondary remove-exercise'>Remove</button>
-            </div>
             <div class='exercise-fields'>
-                <div class='form-group'>
-                    <label>Exercise Name</label>
-                    <input type='text' class='exercise-name'>
+                <div class='exercise-header'>
+                    <input type='text' class='exercise-name' placeholder='Exercise name'>
+                    <button type='button' class='button secondary remove-exercise'>-</button>
+                </div>
+                <div class='number-fields'>
+                    <div class='form-group'>
+                        <input type='number' class='exercise-rounds' min='1' placeholder='Rounds'>
+                    </div>
+                    <div class='form-group'>
+                        <input type='number' class='exercise-reps' min='1' placeholder='Reps'>
+                    </div>
                 </div>
                 <div class='form-group'>
-                    <label>Rounds</label>
-                    <input type='number' class='exercise-rounds' min='1'>
-                </div>
-                <div class='form-group'>
-                    <label>Reps</label>
-                    <input type='number' class='exercise-reps' min='1'>
-                </div>
-                <div class='form-group'>
-                    <label>Notes</label>
-                    <input type='text' class='exercise-notes'>
+                    <input type='text' class='exercise-notes' placeholder='Notes'>
                 </div>
             </div>
         </div>
