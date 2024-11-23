@@ -61,9 +61,31 @@ function createDayElement(weekNumber, dayNumber) {
             <h3>Day ${dayNumber}</h3>
             <button type='button' class='button secondary remove-day' onclick='removeDay(this)'>-</button>
         </div>
-        <!-- Use the same workout creation form here -->
+        <form class='workout-form'>
+            <div class='form-group'>
+                <input type='text' class='workout-name' placeholder='Workout name'>
+            </div>
+            <div id='workout-sections-w${weekNumber}d${dayNumber}' class='workout-sections'></div>
+            <div class='form-group'>
+                <button type='button' class='button secondary' onclick='addSection(${weekNumber}, ${dayNumber})'>
+                    Add Section
+                </button>
+            </div>
+        </form>
     `;
     return dayDiv;
+}
+
+// Reuse workout creation functions with slight modifications
+function addSection(weekNumber, dayNumber) {
+    const sectionsContainer = document.getElementById(\`workout-sections-w\${weekNumber}d\${dayNumber}\`);
+    const sectionElement = createSectionElement();
+    sectionsContainer.appendChild(sectionElement);
+}
+
+function createSectionElement() {
+    const sectionTemplate = document.getElementById('section-template');
+    return document.importNode(sectionTemplate.content, true);
 }
 
 function removeDay(button) {
@@ -79,7 +101,7 @@ function saveProgram() {
         weeks: collectWeeksData()
     };
 
-    // Save to localStorage for now
+    // Save to localStorage
     const programs = JSON.parse(localStorage.getItem('programs') || '[]');
     programs.push({
         ...programData,
@@ -101,11 +123,9 @@ function collectWeeksData() {
         const dayElements = weekElement.querySelectorAll('.program-day');
         
         dayElements.forEach((dayElement, dayIndex) => {
-            // Collect workout data for each day
-            // This will be similar to workout creation data collection
             days.push({
                 dayNumber: dayIndex + 1,
-                workout: {} // Workout data will go here
+                workout: collectWorkoutData(dayElement)
             });
         });
 
@@ -116,4 +136,34 @@ function collectWeeksData() {
     });
 
     return weeks;
+}
+
+function collectWorkoutData(dayElement) {
+    const workoutName = dayElement.querySelector('.workout-name').value;
+    const sections = [];
+    const sectionElements = dayElement.querySelectorAll('.workout-section');
+
+    sectionElements.forEach((sectionElement) => {
+        const exercises = [];
+        const exerciseElements = sectionElement.querySelectorAll('.exercise-item');
+
+        exerciseElements.forEach((exerciseElement) => {
+            exercises.push({
+                name: exerciseElement.querySelector('.exercise-name').value,
+                rounds: parseInt(exerciseElement.querySelector('.exercise-rounds').value) || 0,
+                reps: parseInt(exerciseElement.querySelector('.exercise-reps').value) || 0,
+                notes: exerciseElement.querySelector('.exercise-notes').value
+            });
+        });
+
+        sections.push({
+            type: sectionElement.querySelector('.section-type').value,
+            exercises: exercises
+        });
+    });
+
+    return {
+        name: workoutName,
+        sections: sections
+    };
 }
