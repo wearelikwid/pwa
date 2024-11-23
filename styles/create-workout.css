@@ -64,24 +64,26 @@
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
 }
 
+/* Exercise name group */
 .exercise-name-group {
     display: flex;
+    align-items: center;
     gap: 12px;
-    margin-bottom: 0;
+    margin-bottom: 16px;
 }
 
+/* Number fields */
 .number-fields {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    margin-bottom: 16px;
 }
 
 .number-fields input {
-    width: 120px;
+    width: 100%;
     padding: 12px;
     background: var(--card-background);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -101,6 +103,11 @@
     text-align: center;
 }
 
+.button.primary {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: var(--text-color);
+}
+
 .button.secondary {
     background: var(--card-background);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -113,25 +120,20 @@
     min-width: 40px;
 }
 
-.button.primary {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    color: var(--text-color);
-}
-
 /* Form actions */
 .form-actions {
     margin-top: 32px;
     text-align: center;
 }
 
-/* Responsive design */
+/* Enhanced mobile responsive design */
 @media (max-width: 768px) {
     .container {
         padding: 16px;
     }
 
     .workout-section {
-        padding: 20px;
+        padding: 16px;
     }
 
     .section-header {
@@ -144,16 +146,22 @@
     }
 
     .exercise-item {
-        gap: 12px;
+        padding: 16px;
     }
 
     .number-fields {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+        margin: 0 0 16px 0;
     }
 
     .number-fields input {
         width: 100%;
+        min-width: 0;
+    }
+
+    .exercise-name-group {
+        margin-bottom: 16px;
     }
 }
