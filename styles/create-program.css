@@ -1,0 +1,86 @@
+/* Main container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Form styling */
+.program-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Duration input specific styling */
+.form-group input[type="number"] {
+    width: 200px;
+}
+
+/* Program weeks container */
+.program-weeks {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Button styling */
+.button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.button.primary {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: var(--text-color);
+}
+
+.button.secondary {
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+/* Form actions */
+.form-actions {
+    margin-top: 32px;
+    text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .form-group input[type="number"] {
+        width: 100%;
+    }
+}
