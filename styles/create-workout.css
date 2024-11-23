@@ -25,7 +25,10 @@
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.section-type,
+.exercise-name,
+.exercise-notes {
     width: 100%;
     padding: 12px;
     background: var(--card-background);
@@ -43,7 +46,7 @@
     margin-bottom: 24px;
 }
 
-/* Section header with type selector and remove button */
+/* Section header */
 .section-header {
     display: flex;
     align-items: center;
@@ -51,18 +54,11 @@
     margin-bottom: 24px;
 }
 
-.section-header .form-group {
-    flex: 0 1 200px; /* Make dropdown smaller */
-    margin-bottom: 0;
+.section-header .section-type {
+    width: 200px;
 }
 
-.section-header .button.secondary {
-    padding: 12px;
-    min-width: 40px;
-    margin: 0;
-}
-
-/* Exercise item styling */
+/* Exercise styling */
 .exercise-item {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 12px;
@@ -70,7 +66,6 @@
     margin-bottom: 16px;
 }
 
-/* Exercise header with name and remove button */
 .exercise-header {
     display: flex;
     align-items: center;
@@ -78,31 +73,29 @@
     margin-bottom: 16px;
 }
 
-.exercise-header .button.secondary {
-    padding: 8px 12px;
-    min-width: 40px;
+.exercise-header .exercise-name {
+    flex: 1;
 }
 
-/* Exercise fields layout */
 .exercise-fields {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
 }
 
-.exercise-fields .form-group:first-child {
-    grid-column: 1 / -1;
-}
-
-/* Number input fields */
-.exercise-fields .form-group input[type="number"] {
-    width: 100px;
-}
-
-/* Number fields container */
 .number-fields {
     display: flex;
     gap: 16px;
-    margin-bottom: 16px;
+}
+
+.number-fields input {
+    width: 120px;
+    padding: 12px;
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1rem;
 }
 
 /* Button styling */
@@ -116,14 +109,20 @@
     text-align: center;
 }
 
-.button.primary {
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    color: var(--text-color);
-}
-
 .button.secondary {
     background: var(--card-background);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.button.remove-section,
+.button.remove-exercise {
+    padding: 8px 16px;
+    min-width: 40px;
+}
+
+.button.primary {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     color: var(--text-color);
 }
 
@@ -147,20 +146,22 @@
         gap: 8px;
     }
 
-    .section-header .form-group {
+    .section-header .section-type {
         flex: 1;
+        width: auto;
     }
 
     .exercise-fields {
-        grid-template-columns: 1fr;
-    }
-
-    .number-fields {
-        flex-direction: row;
         gap: 12px;
     }
 
-    .exercise-fields .form-group input[type="number"] {
-        width: 100%;
+    .number-fields {
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+
+    .number-fields input {
+        flex: 1;
+        min-width: 80px;
     }
 }
