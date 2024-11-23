@@ -34,16 +34,10 @@
                     <input type='text' id='workout-type' name='workout-type' placeholder='Enter workout type' required>
                 </div>
 
-                <!-- Sections Container -->
-                <div id='workout-sections' class='workout-sections'>
-                    <!-- Sections will be added here dynamically -->
-                </div>
+                <div id='workout-sections' class='workout-sections'></div>
 
-                <!-- Add Section Button -->
                 <div class='form-group'>
-                    <button type='button' class='button secondary' onclick='addSection()'>
-                        Add New Section
-                    </button>
+                    <button type='button' class='button secondary' onclick='addSection()'>Add New Section</button>
                 </div>
 
                 <div class='form-actions'>
@@ -57,20 +51,16 @@
     <template id='section-template'>
         <div class='workout-section'>
             <div class='section-header'>
-                <div class='form-group'>
-                    <select class='section-type'>
-                        <option value='circuit'>Circuit</option>
-                        <option value='hiit'>HIIT</option>
-                        <option value='emom'>EMOM</option>
-                        <option value='amrap'>AMRAP</option>
-                    </select>
-                </div>
+                <select class='section-type'>
+                    <option value='circuit'>Circuit</option>
+                    <option value='hiit'>HIIT</option>
+                    <option value='emom'>EMOM</option>
+                    <option value='amrap'>AMRAP</option>
+                </select>
                 <button type='button' class='button secondary remove-section'>-</button>
             </div>
 
-            <div class='exercises-list'>
-                <!-- Exercises will be added here -->
-            </div>
+            <div class='exercises-list'></div>
 
             <button type='button' class='button secondary add-exercise'>Add Exercise</button>
         </div>
@@ -79,22 +69,16 @@
     <!-- Exercise Template -->
     <template id='exercise-template'>
         <div class='exercise-item'>
+            <div class='exercise-header'>
+                <input type='text' class='exercise-name' placeholder='Exercise name'>
+                <button type='button' class='button secondary remove-exercise'>-</button>
+            </div>
             <div class='exercise-fields'>
-                <div class='exercise-header'>
-                    <input type='text' class='exercise-name' placeholder='Exercise name'>
-                    <button type='button' class='button secondary remove-exercise'>-</button>
-                </div>
                 <div class='number-fields'>
-                    <div class='form-group'>
-                        <input type='number' class='exercise-rounds' min='1' placeholder='Rounds'>
-                    </div>
-                    <div class='form-group'>
-                        <input type='number' class='exercise-reps' min='1' placeholder='Reps'>
-                    </div>
+                    <input type='number' class='exercise-rounds' min='1' placeholder='Rounds'>
+                    <input type='number' class='exercise-reps' min='1' placeholder='Reps'>
                 </div>
-                <div class='form-group'>
-                    <input type='text' class='exercise-notes' placeholder='Notes'>
-                </div>
+                <input type='text' class='exercise-notes' placeholder='Notes'>
             </div>
         </div>
     </template>
